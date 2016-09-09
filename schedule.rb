@@ -62,6 +62,19 @@ class Movie
     @theater = input_theater
   end
 
+  def run_time_for_easy_read
+    if @run_time.end_with?("1") || @run_time.end_with?("6")
+      @easy_run_time_seconds = @run_time_seconds + 4 * 60
+    elsif @run_time.end_with?("2") || @run_time.end_with?("7")
+      @easy_run_time_seconds = @run_time_seconds + 3 * 60
+    elsif @run_time.end_with?("3") || @run_time.end_with?("8")
+      @easy_run_time_seconds = @run_time_seconds + 2 * 60
+    elsif @run_time.end_with?("4") || @run_time.end_with?("9")
+      @easy_run_time_seconds = @run_time_seconds + 60
+    end
+    @easy_run_time_seconds    
+  end
+
   def self.movie_info_array
     movie_spreadsheet = ARGV.first
     movie_file = File.open(movie_spreadsheet)
@@ -81,7 +94,7 @@ class Movie
 
     movie_array.each do |movie|
       movie_properties = movie.split(", ")
-      
+
       # separate run time hours and minutes, convert total to seconds
       run_time_data = movie_properties[3].split(":")
       hours = run_time_data[0].to_i
@@ -97,15 +110,25 @@ class Movie
     end
     movies
   end 
+
+  def latest_start_time_in_seconds(input_day)
+    start_time_in_seconds = @theater.closing_time_in_seconds(input_day) - run_time_for_easy_read
+  end
+
+  def available_playing_time_before_final_show(input_day)
+    available_time_in_seconds = @theater.available_movie_time_in_seconds(input_day) - run_time_for_easy_read
+  end
 end
 
 # Driver Code
 
 theater = Theater.new({ monday: "11:00am - 11:00pm", tuesday: "11:00am-11:00pm", wednesday: "11:00am - 11:00pm", thursday: "11:00am - 11:00pm", friday: "10:30am - 11:30pm", saturday: "10:30am - 11:30pm", sunday: "10:30am - 11:30pm" })
 p theater
-p theater.day_hours("friday")
-p theater.opening_time_in_seconds("friday")
-p theater.closing_time_in_seconds("friday")
-p theater.available_movie_time_in_seconds("friday")
+p theater.day_hours("thursday")
+p theater.opening_time_in_seconds("thursday")
+p theater.closing_time_in_seconds("thursday")
+p theater.available_movie_time_in_seconds("thursday")
 p Movie.movie_info_array
 p Movie.movie_objects(theater)
+p Movie.movie_objects(theater).first.latest_start_time_in_seconds("thursday")
+p Movie.movie_objects(theater).first.available_playing_time_before_final_show("thursday")
