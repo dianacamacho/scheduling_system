@@ -49,6 +49,18 @@ class Theater
   end
 end
 
+class Movie
+  attr_reader :title, :release_year, :rating, :run_time, :run_time_seconds
+
+  def initialize(movie_hash)
+    @title = movie_hash[:title]
+    @release_year = movie_hash[:release_year]
+    @rating = movie_hash[:rating]
+    @run_time = movie_hash[:run_time]
+    @run_time_seconds = movie_hash[:run_time_seconds]
+  end
+end
+
 # Driver Code
 
 theater = Theater.new({ monday: "11:00am - 11:00pm", tuesday: "11:00am-11:00pm", wednesday: "11:00am - 11:00pm", thursday: "11:00am - 11:00pm", friday: "10:30am - 11:30pm", saturday: "10:30am - 11:30pm", sunday: "10:30am - 11:30pm" })
@@ -56,3 +68,4 @@ p theater
 p theater.day_hours("friday")
 p theater.opening_time_in_seconds("friday")
 p theater.closing_time_in_seconds("friday")
+p theater.available_movie_time_in_seconds("friday")
