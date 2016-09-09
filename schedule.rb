@@ -51,14 +51,15 @@ class Theater
 end
 
 class Movie
-  attr_reader :title, :release_year, :rating, :run_time, :run_time_seconds
+  attr_reader :title, :release_year, :rating, :run_time, :run_time_seconds, :theater
 
-  def initialize(movie_hash)
+  def initialize(movie_hash, input_theater)
     @title = movie_hash[:title]
     @release_year = movie_hash[:release_year]
     @rating = movie_hash[:rating]
     @run_time = movie_hash[:run_time]
     @run_time_seconds = movie_hash[:run_time_seconds]
+    @theater = input_theater
   end
 
   def self.movie_info_array
@@ -73,6 +74,29 @@ class Movie
     movie_array.shift # remove input file header row
     movie_array
   end
+
+  def self.movie_objects(theater)
+    movie_array = self.movie_info_array
+    movie_hashes = []
+
+    movie_array.each do |movie|
+      movie_properties = movie.split(", ")
+      
+      # separate run time hours and minutes, convert total to seconds
+      run_time_data = movie_properties[3].split(":")
+      hours = run_time_data[0].to_i
+      minutes = run_time_data[1].to_i
+      run_time_in_seconds = hours * 3600 + minutes * 60
+
+      movie_hashes << { title: movie_properties[0], release_year: movie_properties[1], rating: movie_properties[2], run_time: movie_properties[3], run_time_seconds: run_time_in_seconds }
+    end
+
+    movies = []
+    movie_hashes.each do |movie_hash|
+      movies << Movie.new(movie_hash, theater)
+    end
+    movies
+  end 
 end
 
 # Driver Code
@@ -84,3 +108,4 @@ p theater.opening_time_in_seconds("friday")
 p theater.closing_time_in_seconds("friday")
 p theater.available_movie_time_in_seconds("friday")
 p Movie.movie_info_array
+p Movie.movie_objects(theater)
