@@ -133,14 +133,14 @@ class Movie
     pre_final_movie_run_time = run_time_for_easy_read + theater_clean_up_in_seconds
   end
 
-  def showings_per_day(input_day)
-    # showings before final show + last showing
-    showings = available_playing_time_before_final_show(input_day) / movie_run_time_before_final_show + 1
+  def screenings_per_day(input_day)
+    # screenings before final show + last screening
+    screenings = available_playing_time_before_final_show(input_day) / movie_run_time_before_final_show + 1
   end
 
   def schedule_start_times(input_day)
     start_times = []
-    early_showings = showings_per_day(input_day) - 1
+    early_screenings = screenings_per_day(input_day) - 1
     last_start_time_in_seconds = latest_start_time_in_seconds(input_day)
     last_start_time_hours = last_start_time_in_seconds / 3600
     last_start_time_minutes = last_start_time_in_seconds % 3600 / 60
@@ -160,7 +160,7 @@ class Movie
     start_times.insert(0, last_start_time)
     previous_start_time_in_seconds = last_start_time_in_seconds
   
-    early_showings.times do 
+    early_screenings.times do 
       start_time_in_seconds = previous_start_time_in_seconds - movie_run_time_before_final_show
       start_time_hours = start_time_in_seconds / 3600
       start_time_minutes = start_time_in_seconds % 3600 / 60
@@ -186,7 +186,7 @@ class Movie
 
   def schedule_end_times(input_day)
     end_times = []
-    early_showings = showings_per_day(input_day) - 1
+    early_screenings = screenings_per_day(input_day) - 1
     last_end_time_in_seconds = latest_start_time_in_seconds(input_day) + @run_time_seconds
     last_end_time_hours = last_end_time_in_seconds / 3600
     last_end_time_minutes = last_end_time_in_seconds % 3600 / 60
@@ -205,7 +205,7 @@ class Movie
     end_times.insert(0, last_end_time)
     previous_end_time_in_seconds = last_end_time_in_seconds
   
-    early_showings.times do 
+    early_screenings.times do 
       end_time_in_seconds = previous_end_time_in_seconds - movie_run_time_before_final_show
       end_time_hours = end_time_in_seconds / 3600
       end_time_minutes = end_time_in_seconds % 3600 / 60
@@ -245,7 +245,7 @@ class Movie
       show_times << show_time
     end
 
-    movie_schedule = "#{@title} - Rated #{@rating}, #{@run_time}\n"
+    movie_schedule = "#{@title} - Rated #{@rating}, #{@run_time}"
     show_times.each do |show_time| 
       movie_schedule += "\n\t#{show_time[0]} - #{show_time[1]}"
     end
@@ -256,19 +256,5 @@ end
 # Driver Code
 
 theater = Theater.new({ monday: "11:00am - 11:00pm", tuesday: "11:00am-11:00pm", wednesday: "11:00am - 11:00pm", thursday: "11:00am - 11:00pm", friday: "10:30am - 11:30pm", saturday: "10:30am - 11:30pm", sunday: "10:30am - 11:30pm" })
-# p theater
-# p theater.day_hours("thursday")
-# p theater.opening_time_in_seconds("thursday")
-# p theater.closing_time_in_seconds("thursday")
-# p theater.available_movie_time_in_seconds("thursday")
-# p Movie.movie_info_array
-# p Movie.movie_objects(theater)
-# p Movie.movie_objects(theater).first.latest_start_time_in_seconds("thursday")
-# p Movie.movie_objects(theater).first.available_playing_time_before_final_show("thursday")
-# p Movie.movie_objects(theater).first.movie_run_time_before_final_show
-# p Movie.movie_objects(theater).first.showings_per_day("thursday")
-# p Movie.movie_objects(theater).first.schedule_start_times("thursday")
-# p Movie.movie_objects(theater).first.schedule_end_times("thursday")
-# p Movie.movie_objects(theater).first.print_schedule("thursday")
 movies = Movie.movie_objects(theater)
-theater.schedule(movies, "thursday")
+theater.schedule(movies, "Thursday")
