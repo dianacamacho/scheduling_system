@@ -1,4 +1,6 @@
 class Theater
+  attr_reader :hours_of_operation
+  
   def initialize(hours_hash)
     @hours_of_operation = hours_hash
   end
@@ -8,7 +10,7 @@ class Theater
     opening_time = @hours_of_operation[day_of_week]
   end
 
-  def day_opening_time_in_seconds(input_day)
+  def opening_time_in_seconds(input_day)
     hours = day_hours(input_day)
     hours.gsub!(" ", "")
     hours_array = hours.split("-")
@@ -24,7 +26,7 @@ class Theater
     opening_time_in_seconds = opening_time_hour * 3600 + opening_time_minutes * 60
   end
 
-  def day_closing_time_in_seconds(input_day)
+  def closing_time_in_seconds(input_day)
     hours = day_hours(input_day)
     hours.gsub!(" ", "")
     hours_array = hours.split("-")
@@ -39,6 +41,12 @@ class Theater
     closing_time_minutes = closing_time_array[1].gsub(/(am|pm)/, "").to_i
     closing_time_in_seconds = closing_time_hour * 3600 + closing_time_minutes * 60
   end
+
+  def available_movie_time_in_seconds(input_day)
+    seconds_open = closing_time_in_seconds(input_day) - opening_time_in_seconds(input_day)
+    theater_opening_prep_seconds = 3600
+    total_available_movie_time = seconds_open - theater_opening_prep_seconds
+  end
 end
 
 # Driver Code
@@ -46,5 +54,5 @@ end
 theater = Theater.new({ monday: "11:00am - 11:00pm", tuesday: "11:00am-11:00pm", wednesday: "11:00am - 11:00pm", thursday: "11:00am - 11:00pm", friday: "10:30am - 11:30pm", saturday: "10:30am - 11:30pm", sunday: "10:30am - 11:30pm" })
 p theater
 p theater.day_hours("friday")
-p theater.day_opening_time_in_seconds("friday")
-p theater.day_closing_time_in_seconds("friday")
+p theater.opening_time_in_seconds("friday")
+p theater.closing_time_in_seconds("friday")
