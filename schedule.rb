@@ -118,6 +118,16 @@ class Movie
   def available_playing_time_before_final_show(input_day)
     available_time_in_seconds = @theater.available_movie_time_in_seconds(input_day) - run_time_for_easy_read
   end
+
+  def movie_run_time_before_final_show
+    theater_clean_up_in_seconds = 35 * 60
+    pre_final_movie_run_time = run_time_for_easy_read + theater_clean_up_in_seconds
+  end
+
+  def showings_per_day(input_day)
+    # showings before final show + last showing
+    showings = available_playing_time_before_final_show(input_day) / movie_run_time_before_final_show + 1
+  end
 end
 
 # Driver Code
