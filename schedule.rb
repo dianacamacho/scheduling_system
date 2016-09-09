@@ -12,10 +12,11 @@ class Theater
 
   def opening_time_in_seconds(input_day)
     hours = day_hours(input_day)
-    hours.gsub!(" ", "")
-    hours_array = hours.split("-")
+    hours.gsub!(" ", "") # remove spaces from hours string
+    hours_array = hours.split("-") # remove - to leave only array of time values
     opening_time_array = hours_array[0].split(":")
 
+    # separate hour and minute values, convert total to seconds
     if opening_time_array[1].include?("am")
       opening_time_hour = opening_time_array[0].to_i
     else 
@@ -59,6 +60,19 @@ class Movie
     @run_time = movie_hash[:run_time]
     @run_time_seconds = movie_hash[:run_time_seconds]
   end
+
+  def self.movie_info_array
+    movie_spreadsheet = ARGV.first
+    movie_file = File.open(movie_spreadsheet)
+    movie_array = IO.readlines(movie_file)
+
+    movie_array.map! do |line|
+      line.gsub(/\n/, "") # remove /n from movie info string
+    end
+
+    movie_array.shift # remove input file header row
+    movie_array
+  end
 end
 
 # Driver Code
@@ -69,3 +83,4 @@ p theater.day_hours("friday")
 p theater.opening_time_in_seconds("friday")
 p theater.closing_time_in_seconds("friday")
 p theater.available_movie_time_in_seconds("friday")
+p Movie.movie_info_array
