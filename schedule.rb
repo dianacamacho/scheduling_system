@@ -219,6 +219,29 @@ class Movie
     end
     end_times
   end
+
+  def print_schedule(input_day)
+    show_times = []
+    start_times = schedule_start_times(input_day)
+    end_times = schedule_end_times(input_day)
+   
+    loop_times = start_times.count
+    index = 0
+
+    loop_times.times do
+      show_time = []
+      show_time << start_times[index]
+      show_time << end_times[index]
+      index += 1
+      show_times << show_time
+    end
+
+    movie_schedule = "#{@title} - Rated #{@rating}, #{@run_time}\n"
+    show_times.each do |show_time| 
+      movie_schedule += "\n\t#{show_time[0]} - #{show_time[1]}"
+    end
+    movie_schedule
+  end
 end
 
 # Driver Code
@@ -237,3 +260,4 @@ p Movie.movie_objects(theater).first.movie_run_time_before_final_show
 p Movie.movie_objects(theater).first.showings_per_day("thursday")
 p Movie.movie_objects(theater).first.schedule_start_times("thursday")
 p Movie.movie_objects(theater).first.schedule_end_times("thursday")
+p Movie.movie_objects(theater).first.print_schedule("thursday")
