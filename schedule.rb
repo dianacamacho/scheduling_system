@@ -155,6 +155,7 @@ class Movie
       start_time_in_seconds = previous_start_time_in_seconds - movie_run_time_before_final_show
       start_time_hours = start_time_in_seconds / 3600
       start_time_minutes = start_time_in_seconds % 3600 / 60
+      
       if start_time_minutes < 10 
         start_time_minutes = "0#{start_time_minutes}"
       end
@@ -173,6 +174,51 @@ class Movie
     end
     start_times
   end
+
+  def schedule_end_times(input_day)
+    end_times = []
+    early_showings = showings_per_day(input_day) - 1
+    last_end_time_in_seconds = latest_start_time_in_seconds(input_day) + @run_time_seconds
+    last_end_time_hours = last_end_time_in_seconds / 3600
+    last_end_time_minutes = last_end_time_in_seconds % 3600 / 60
+
+    if last_end_time_hours > 12
+      last_end_time_hours -= 12
+      if last_end_time_minutes < 10
+        last_end_time = "#{last_end_time_hours}:0#{last_end_time_minutes}pm"
+      else 
+        last_end_time = "#{last_end_time_hours}:#{last_end_time_minutes}pm"
+      end
+    else
+      last_end_time = "#{last_end_time_hours}:#{last_end_time_minutes}am"
+    end
+
+    end_times.insert(0, last_end_time)
+    previous_end_time_in_seconds = last_end_time_in_seconds
+  
+    early_showings.times do 
+      end_time_in_seconds = previous_end_time_in_seconds - movie_run_time_before_final_show
+      end_time_hours = end_time_in_seconds / 3600
+      end_time_minutes = end_time_in_seconds % 3600 / 60
+      
+      if end_time_minutes < 10 
+        end_time_minutes = "0#{end_time_minutes}"
+      end
+
+      if end_time_hours > 12
+        end_time_hours -= 12
+        end_time = "#{end_time_hours}:#{end_time_minutes}pm"
+      elsif end_time_hours == 12
+        end_time = "#{end_time_hours}:#{end_time_minutes}pm"
+      else
+        end_time = "#{end_time_hours}:#{end_time_minutes}am"
+      end
+      
+      end_times.insert(0, end_time)
+      previous_end_time_in_seconds = end_time_in_seconds
+    end
+    end_times
+  end
 end
 
 # Driver Code
@@ -190,3 +236,4 @@ p Movie.movie_objects(theater).first.available_playing_time_before_final_show("t
 p Movie.movie_objects(theater).first.movie_run_time_before_final_show
 p Movie.movie_objects(theater).first.showings_per_day("thursday")
 p Movie.movie_objects(theater).first.schedule_start_times("thursday")
+p Movie.movie_objects(theater).first.schedule_end_times("thursday")
