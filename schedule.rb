@@ -48,6 +48,15 @@ class Theater
     theater_opening_prep_seconds = 3600
     total_available_movie_time = seconds_open - theater_opening_prep_seconds
   end
+
+  def schedule(movies, input_day)
+    day_of_week = input_day.capitalize
+    full_schedule = "#{day_of_week}\n\n"
+    movies.each do |movie|
+      full_schedule += movie.print_schedule(input_day) + "\n\n"
+    end
+    puts full_schedule
+  end
 end
 
 class Movie
@@ -247,17 +256,19 @@ end
 # Driver Code
 
 theater = Theater.new({ monday: "11:00am - 11:00pm", tuesday: "11:00am-11:00pm", wednesday: "11:00am - 11:00pm", thursday: "11:00am - 11:00pm", friday: "10:30am - 11:30pm", saturday: "10:30am - 11:30pm", sunday: "10:30am - 11:30pm" })
-p theater
-p theater.day_hours("thursday")
-p theater.opening_time_in_seconds("thursday")
-p theater.closing_time_in_seconds("thursday")
-p theater.available_movie_time_in_seconds("thursday")
-p Movie.movie_info_array
-p Movie.movie_objects(theater)
-p Movie.movie_objects(theater).first.latest_start_time_in_seconds("thursday")
-p Movie.movie_objects(theater).first.available_playing_time_before_final_show("thursday")
-p Movie.movie_objects(theater).first.movie_run_time_before_final_show
-p Movie.movie_objects(theater).first.showings_per_day("thursday")
-p Movie.movie_objects(theater).first.schedule_start_times("thursday")
-p Movie.movie_objects(theater).first.schedule_end_times("thursday")
-p Movie.movie_objects(theater).first.print_schedule("thursday")
+# p theater
+# p theater.day_hours("thursday")
+# p theater.opening_time_in_seconds("thursday")
+# p theater.closing_time_in_seconds("thursday")
+# p theater.available_movie_time_in_seconds("thursday")
+# p Movie.movie_info_array
+# p Movie.movie_objects(theater)
+# p Movie.movie_objects(theater).first.latest_start_time_in_seconds("thursday")
+# p Movie.movie_objects(theater).first.available_playing_time_before_final_show("thursday")
+# p Movie.movie_objects(theater).first.movie_run_time_before_final_show
+# p Movie.movie_objects(theater).first.showings_per_day("thursday")
+# p Movie.movie_objects(theater).first.schedule_start_times("thursday")
+# p Movie.movie_objects(theater).first.schedule_end_times("thursday")
+# p Movie.movie_objects(theater).first.print_schedule("thursday")
+movies = Movie.movie_objects(theater)
+theater.schedule(movies, "thursday")
